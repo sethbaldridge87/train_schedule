@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Untitled Document</title>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+<div class="container" id="header">
+	<h1 class="card-header">Anytime is Train Time</h1>
+</div>
+<div class="container" id="schedule">
+	<div class="card">
+		<h3 class="card-header">Current Train Schedule</h3>
+		<div class="card-body">
+			<div class="row"></div>
+		</div>
+	</div>
+	<div class="card">
+		<h3 class="card-header">Add Train</h3>
+		<div class="card-body">
+			<form>
+				<div class="form-group">
+					<label>Train Name</label>
+					<input class="form-control">
+					<label>Destination</label>
+					<input class="form-control">
+					<label>First Train Time (HH:mm - military time)</label>
+					<div class="row">
+						<div class="col-md-1">
+							<input type="number" class="form-control" max="24" min="0" placeholder="0">
+						</div>:
+						<div class="col-md-1">
+							<input type="number" class="form-control" max="59" min="0" placeholder="0">
+						</div>
+					</div>
+					<label>Frequency (min)</label>
+					<input type="number" class="form-control" max="59"><br>
+					<input type="submit" value="Submit" class="btn btn-success">
+					<input type="reset" value="Reset" class="btn btn-secondary">
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+</body>
+<script>
+$(document).ready(function(){
+	
+});	
+</script>
+<style>
+	#header h1 {
+		padding: 30px;
+		text-align: center;
+		background-color: #11220D;
+	}
+	.card-header {
+		background-color: #45448E;
+		color: white;
+	}
+	#add_train {
+		background-color: red;
+		color: white;
+	}
+</style>
+</html>
