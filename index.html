@@ -6,6 +6,7 @@
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.js"></script>
 </head>
 <script src="https://www.gstatic.com/firebasejs/5.7.0/firebase.js"></script>
 <script>
@@ -33,6 +34,8 @@
 				<div class="col"><b>Train Name</b></div>
 				<div class="col"><b>Destination</b></div>
 				<div class="col"><b>Frequency</b></div>
+				<div class="col"><b>Next Arrival</b></div>
+				<div class="col"><b>Minutes Away</b></div>
 			</div>
 			<hr>
 			<!--insert rows here-->
@@ -58,7 +61,7 @@
 					</div>
 					<label>Frequency (min)</label>
 					<input type="number" class="form-control" max="59" id="frequency"><br>
-					<input type="submit" value="Submit" class="btn btn-success" id="submission">
+					<input type="" value="Submit" class="btn btn-success" id="submission">
 					<input type="reset" value="Reset" class="btn btn-secondary">
 				</div>
 			</form>
@@ -68,24 +71,64 @@
 </body>
 <script>
 $(document).ready(function(){
+	
+
+	
+	
+	
+	
+	//var now = moment("9:40", "HH:mm");
+	var new_now = moment();
+	//alert(now);
 	$("#submission").on('click',function(){
+		
 		var trainName = $('#train_name').val();
 		var destination = $('#destination').val();
-		var departure = $('#hours').val() + ":" + $('#minutes').val();
-		var frequency = $('#frequency').val();
-		alert(departure);
+		var time_stamp = $('#hours').val() + ":" + $('#minutes').val();
+		var new_frequency = $('#frequency').val();
+		
+		
+		var new_departure = moment(time_stamp, "HH:mm");
+		alert(new_departure);
+		alert(new_now);
+		var new_duration = moment.duration(new_now.diff(new_departure));
+		//var hours = parseInt(duration.asHours());
+		//var minutes = parseInt(duration.asMinutes())-hours*60;
+		var new_minutes_diff = parseInt(new_duration.asMinutes());
+		alert(new_minutes_diff);
+		//var result = new_departure.diff(new_now, 'hours') + " Hrs and " + new_departure.diff(new_now, 'minutes') + " Mns";
+		var new_minutes_away = new_minutes_diff % new_frequency;
+		alert(new_minutes_away);
+		//alert(result);
+		
+		
+			
 		event.preventDefault;
 		database.ref().push({
 			Train_Name : trainName,
 			Destination: destination,
-			Departure: departure,
-			Frequency: frequency
+			Departure: time_stamp,
+			Frequency: new_frequency
 		});
 	});
 	database.ref().on("child_added", function(snapshot) {
-		$('#current_schedule').append('<div class="row"><div class="col">' + snapshot.val().Train_Name + 
-		'</div><div class="col">' + snapshot.val().Destination + '</div><div class="col">' + snapshot.val().Frequency + '</div></div>');
-		console.log(snapshot.val().Destination);
+		var train = snapshot.val().Train_Name;
+		var whereTo = snapshot.val().Destination;
+		var howOften = snapshot.val().Frequency;
+		var now = moment();
+		console.log(now);
+		var departure = snapshot.val().Departure;
+		console.log(departure);
+		departure = moment(departure, "HH:mm");
+		var duration = moment.duration(now.diff(departure));
+		console.log(duration);
+		var minutes_diff = parseInt(duration.asMinutes());
+		console.log(minutes_diff);
+		var minutes_away = minutes_diff % howOften;
+		minutes_away = howOften - minutes_away;
+		$('#current_schedule').append('<div class="row"><div class="col">' + train + 
+		'</div><div class="col">' + whereTo + '</div><div class="col">' + howOften + 
+		'</div><div class="col"></div><div class="col">' + minutes_away + '</div></div>');
 		
 	}, function(errorObject) {
 		console.log("The read failed: " + errorObject.code);
