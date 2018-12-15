@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Untitled Document</title>
+<title>Start a Love Train</title>
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -24,7 +24,7 @@
 </script>
 <body>
 <div class="container" id="header">
-	<h1 class="card-header">Anytime is Train Time</h1>
+	<h1 class="card-header">Join Hands, Start a Love Train</h1>
 </div>
 <div class="container" id="schedule">
 	<div class="card">
@@ -72,37 +72,24 @@
 <script>
 $(document).ready(function(){
 	
-
-	
-	
-	
-	
-	//var now = moment("9:40", "HH:mm");
+	var now = moment();
 	var new_now = moment();
-	//alert(now);
+	now = moment(now).format("HH:mm");
 	$("#submission").on('click',function(){
-		
+	
 		var trainName = $('#train_name').val();
 		var destination = $('#destination').val();
 		var time_stamp = $('#hours').val() + ":" + $('#minutes').val();
 		var new_frequency = $('#frequency').val();
 		
-		
 		var new_departure = moment(time_stamp, "HH:mm");
-		alert(new_departure);
-		alert(new_now);
+
 		var new_duration = moment.duration(new_now.diff(new_departure));
-		//var hours = parseInt(duration.asHours());
-		//var minutes = parseInt(duration.asMinutes())-hours*60;
+
 		var new_minutes_diff = parseInt(new_duration.asMinutes());
-		alert(new_minutes_diff);
-		//var result = new_departure.diff(new_now, 'hours') + " Hrs and " + new_departure.diff(new_now, 'minutes') + " Mns";
+
 		var new_minutes_away = new_minutes_diff % new_frequency;
-		alert(new_minutes_away);
-		//alert(result);
-		
-		
-			
+
 		event.preventDefault;
 		database.ref().push({
 			Train_Name : trainName,
@@ -116,19 +103,17 @@ $(document).ready(function(){
 		var whereTo = snapshot.val().Destination;
 		var howOften = snapshot.val().Frequency;
 		var now = moment();
-		console.log(now);
 		var departure = snapshot.val().Departure;
-		console.log(departure);
 		departure = moment(departure, "HH:mm");
 		var duration = moment.duration(now.diff(departure));
-		console.log(duration);
 		var minutes_diff = parseInt(duration.asMinutes());
-		console.log(minutes_diff);
 		var minutes_away = minutes_diff % howOften;
 		minutes_away = howOften - minutes_away;
+		var next_arrival = moment(now).add(minutes_away, 'minutes');
+		next_arrival = moment(next_arrival).format("HH:mm");
 		$('#current_schedule').append('<div class="row"><div class="col">' + train + 
 		'</div><div class="col">' + whereTo + '</div><div class="col">' + howOften + 
-		'</div><div class="col"></div><div class="col">' + minutes_away + '</div></div>');
+		'</div><div class="col">' + next_arrival + '</div><div class="col">' + minutes_away + '</div></div>');
 		
 	}, function(errorObject) {
 		console.log("The read failed: " + errorObject.code);
