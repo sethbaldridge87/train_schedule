@@ -1,4 +1,4 @@
-Train Schedule
+# Train Schedule
 
 Technologies used: jQuery, Bootstrap, Firebase, Moment.js.
 
